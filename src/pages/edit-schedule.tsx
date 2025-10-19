@@ -7,7 +7,10 @@ import type { DateRange } from 'react-day-picker'
 
 import CalendarIcon from '@/assets/icons/calendar.svg?react'
 import TriangleExclamationIcon from '@/assets/icons/triangle-exclamation.svg?react'
-import { EditPageLayout } from '@/components/edit/edit-page-layout'
+import {
+  EditPageLayout,
+  type SubmitStatus,
+} from '@/components/edit/edit-page-layout'
 import { Instructions } from '@/components/shared/instructions'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -18,8 +21,11 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/utils'
 
+const PAGE_TITLE = '  設定排播日期'
+
 export default function EditSchedule() {
   const [range, setRange] = useState<DateRange | undefined>(undefined)
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
 
   const dateFormat = 'yyyy/M/d'
 
@@ -52,14 +58,25 @@ export default function EditSchedule() {
     }
 
     console.log('Submitted schedule:', formattedRange)
+
+    // Demo alert to choose result
+    const isSuccess = window.confirm(
+      '是否要模擬「送出成功」？按「取消」則模擬失敗。'
+    )
+    if (isSuccess) {
+      setSubmitStatus('success')
+    } else {
+      setSubmitStatus('failure')
+    }
   }
 
   return (
     <EditPageLayout
-      title="提出修改"
+      pageTitle={PAGE_TITLE}
       onSubmit={handleSubmit}
       submitButtonName="送出"
       cardTitle="重新設定排播日期"
+      submitStatus={submitStatus}
     >
       <div className="space-y-m">
         <h6 className="flex items-center gap-1">

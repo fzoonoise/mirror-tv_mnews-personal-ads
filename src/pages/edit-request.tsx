@@ -1,7 +1,12 @@
+import { useState } from 'react'
+
 import TextFormatIcon from '@/assets/icons/text-format.svg?react'
 import TextIcon from '@/assets/icons/text.svg?react'
 import TriangleExclamationIcon from '@/assets/icons/triangle-exclamation.svg?react'
-import { EditPageLayout } from '@/components/edit/edit-page-layout'
+import {
+  EditPageLayout,
+  type SubmitStatus,
+} from '@/components/edit/edit-page-layout'
 import { Instructions } from '@/components/shared/instructions'
 import { cn } from '@/utils'
 
@@ -14,20 +19,35 @@ const INSTRUCTIONS_INFO = [
   '修改確認後，需重新安排排播時間',
 ]
 
+const PAGE_TITLE = '提出修改'
+
 export default function EditRequest() {
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const reason = formData.get('reason')
     const details = formData.get('details')
     console.log({ reason, details })
+
+    // Demo alert to choose result
+    const isSuccess = window.confirm(
+      '是否要模擬「送出成功」？按「取消」則模擬失敗。'
+    )
+    if (isSuccess) {
+      setSubmitStatus('success')
+    } else {
+      setSubmitStatus('failure')
+    }
   }
 
   return (
     <EditPageLayout
-      title="提出修改"
+      pageTitle={PAGE_TITLE}
       onSubmit={handleSubmit}
       submitButtonName="送出修改請求"
+      submitStatus={submitStatus}
     >
       <div className="space-y-m">
         <label

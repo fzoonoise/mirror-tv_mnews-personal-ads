@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Link } from 'react-router-dom'
 
-import DoneWithCircleIcon from '@/assets/icons/done-with-circle.svg?react'
+import DoneCircleIcon from '@/assets/icons/done-circle.svg?react'
 import EditIcon from '@/assets/icons/edit.svg?react'
 import UploadIcon from '@/assets/icons/upload.svg?react'
 import { Button } from '@/components/ui/button'
@@ -94,7 +94,7 @@ const ACTION_MAP: Record<string, ActionConfig> = {
   },
   [ORDER_STATUS.PENDING_CONFIRMATION]: {
     buttonText: '確認',
-    buttonIcon: <DoneWithCircleIcon />,
+    buttonIcon: <DoneCircleIcon />,
     buttonClassName: styles.primaryButton,
     helpText: '需要協助？',
     helpLinkText: '申請退款',

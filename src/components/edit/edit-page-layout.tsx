@@ -1,14 +1,19 @@
+import SubmitResult from '../shared/submit-result'
+
 import PageHeader from '@/components/shared/page-header'
 import PageMain from '@/components/shared/page-main'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 
+export type SubmitStatus = 'idle' | 'success' | 'failure'
+
 type EditPageLayoutProps = {
-  title: string
+  pageTitle: string
   children: React.ReactNode
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
   submitButtonName: string
   cardTitle?: string
+  submitStatus: SubmitStatus
 }
 
 const Mock_Order_Number = 'B7H8M3'
@@ -16,11 +21,12 @@ const Mock_Order_Name = '新年特惠商品'
 const Mock_Order_Date = '2024/12/25-2025/12/31'
 
 export function EditPageLayout({
-  title,
+  pageTitle,
   children,
   onSubmit,
   submitButtonName,
   cardTitle,
+  submitStatus,
 }: EditPageLayoutProps) {
   const orderInfo = [
     { title: '訂單編號', value: '#' + Mock_Order_Number },
@@ -28,9 +34,22 @@ export function EditPageLayout({
     { title: '排播日期', value: Mock_Order_Date },
   ]
 
+  if (submitStatus === 'success') {
+    return (
+      <SubmitResult
+        pageTitle={pageTitle}
+        status="success"
+        heading="送出成功"
+        message="業務會寄信給您溝通後續修改事宜，再請密切注意"
+      />
+    )
+  } else if (submitStatus === 'failure') {
+    return <SubmitResult pageTitle={pageTitle} />
+  }
+
   return (
     <>
-      <PageHeader title={title} />
+      <PageHeader title={pageTitle} />
       <PageMain className="space-y-xl py-5 md:space-y-3xl md:py-10 xl:space-y-4xl">
         {/* Order info */}
         <Card>
@@ -51,7 +70,12 @@ export function EditPageLayout({
             {!!cardTitle && <CardTitle>{cardTitle}</CardTitle>}
             <CardContent className="space-y-3xl">{children}</CardContent>
             <CardFooter className="justify-end gap-2">
-              <Button variant="outline" intent="secondary">
+              <Button
+                variant="outline"
+                intent="secondary"
+                type="button"
+                onClick={() => alert('取消')}
+              >
                 取消
               </Button>
               <Button type="submit">{submitButtonName}</Button>
